@@ -1,13 +1,16 @@
-const { env } = require('./config/env');
+const { env, assertProductionEnv } = require('./config/env');
 const { connectDatabase, disconnectDatabase } = require('./config/database');
 const app = require('./app');
+const { startJobs } = require('./jobs');
 
 async function startServer() {
   try {
+    assertProductionEnv();
     await connectDatabase();
     const server = app.listen(env.port, () => {
       console.info(`AVOM API listening on port ${env.port} (${env.nodeEnv}).`);
     });
+    startJobs();
 
     let shuttingDown = false;
     const shutdown = (signal) => {

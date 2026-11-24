@@ -23,5 +23,14 @@ npm start
 
 ## Current scope
 
-The API health route, shared middleware, optional integration configuration, and database connection boundary are established. Authentication, academic workflows, media operations, payment processing, and scheduled deletion are not yet active. Full platform architecture, database design, API, authentication, deployment, environment, and roadmap documentation is in [`docs/`](docs/).
-# AVOM_Backend
+The full API is implemented (see [`docs/API.md`](docs/API.md), [`docs/BUSINESS_RULES.md`](docs/BUSINESS_RULES.md) and, importantly, [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) for how far it has been verified). Project rules for contributors and AI assistants are in [`Copilot.md`](Copilot.md).
+
+```sh
+npm install
+cp .env.example .env     # mock values work for local development
+npm run seed -- --demo   # first Super Admin + fictional demo programme
+npm run dev
+npm run test:logic       # runs without MongoDB
+```
+
+Emails are only printed to the console and storage is mocked until real keys are added to `.env`.
