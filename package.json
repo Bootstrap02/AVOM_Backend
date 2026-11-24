@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "build": "echo 'Backend has no build step; ready to run'",
     "test": "jest --runInBand",
     "lint": "eslint src tests",
     "format": "prettier --write src tests",

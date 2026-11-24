@@ -1,7 +1,17 @@
 const path = require('node:path');
+const fs = require('node:fs');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Only load .env in non-production. On Render, env vars are injected directly
+// by the platform; .env is gitignored and must not be relied upon.
+const envPath = path.resolve(__dirname, '..', '.env');
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+  } else {
+    dotenv.config(); // fall back to cwd .env if present
+  }
+}
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isProduction = nodeEnv === 'production';
