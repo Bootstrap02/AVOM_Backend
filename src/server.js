@@ -2,11 +2,13 @@ const { env, assertProductionEnv } = require('./config/env');
 const { connectDatabase, disconnectDatabase } = require('./config/database');
 const app = require('./app');
 const { startJobs } = require('./jobs');
+const { ensureBootstrapAdmin } = require('./services/bootstrap.service');
 
 async function startServer() {
   try {
     assertProductionEnv();
     await connectDatabase();
+    await ensureBootstrapAdmin();
     const server = app.listen(env.port, () => {
       console.info(`AVOM API listening on port ${env.port} (${env.nodeEnv}).`);
     });

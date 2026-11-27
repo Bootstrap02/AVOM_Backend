@@ -1,5 +1,6 @@
 const NgoPost = require('../models/NgoPost');
 const AudioEpisode = require('../models/AudioEpisode');
+const Page = require('../models/Page');
 const ApiError = require('../utils/ApiError');
 const { ok, created, paginated, parsePage, pageMeta } = require('../utils/respond');
 const { slugify } = require('../utils/slug');
@@ -125,7 +126,24 @@ const radio = adminResource({
   },
 });
 
+const pages = adminResource({
+  Model: Page, label: 'page', expiryKey: null,
+  applyBody(doc, b) {
+    ['title', 'content', 'excerpt', 'isPublished', 'meta'].forEach((f) => { if (b[f] !== undefined) doc[f] = b[f]; });
+  },
+});
+
 // ---- Public ----
+async function publicPagesList(_req, res) {
+  const items = await Page.find({ isPublished: true }).select('slug title content excerpt meta').sort('slug').lean();
+  ok(res, items);
+}
+
+async function publicPageOne(req, res) {
+  const doc = await Page.findOne({ slug: req.params.slug, isPublished: true }).select('slug title content excerpt meta').lean();
+  if (!doc) throw ApiError.notFound('Page not found');
+  ok(res, doc);
+}
 const publicCard = (d) => ({
   id: d._id, slug: d.slug, kind: d.kind, title: d.title, excerpt: d.excerpt, eventDate: d.eventDate,
   cover: d.cover?.secureUrl, publishedAt: d.publishedAt, pinned: d.pinned,
@@ -199,4 +217,4 @@ async function podcastFeed(_req, res) {
 </rss>`);
 }
 
-module.exports = { ngo, radio, publicNgoList, publicNgoOne, publicGallery, publicRadioList, publicRadioLatest, podcastFeed };
+module.exports = { ngo, radio, pages, publicNgoList, publicNgoOne, publicGallery, publicRadioList, publicRadioLatest, podcastFeed, publicPagesList, publicPageOne };

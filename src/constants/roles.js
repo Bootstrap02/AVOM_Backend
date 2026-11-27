@@ -23,6 +23,7 @@ const PERMISSIONS = Object.freeze({
   CERTIFICATES_ISSUE: 'certificates.issue',
   CONTENT_NGO: 'content.ngo',
   CONTENT_RADIO: 'content.radio',
+  CONTENT_PAGES: 'content.pages',
   SUPPORT_READ: 'support.read',
   SUPPORT_RESPOND: 'support.respond',
   FAQ_MANAGE: 'faq.manage',

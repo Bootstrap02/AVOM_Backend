@@ -1,5 +1,7 @@
 // Built-in email templates. Admins can override subject/body per key (EmailTemplate collection).
 // Placeholders use {{name}} syntax. Values are HTML-escaped when rendered.
+// Absolute URL: email clients cannot load relative images. The file is served by the public website.
+const LOGO_URL = `${(process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/+$/, '')}/avom-logo.png`;
 const BRAND = { blue: '#2C3E50', green: '#6ABF4B', gold: '#F1C40F', grey: '#BDC3C7' };
 
 const button = (href, label) =>
@@ -9,7 +11,7 @@ function layout(title, bodyHtml) {
   return `<!doctype html><html><body style="margin:0;background:#f4f6f8;font-family:Lato,Open Sans,Arial,sans-serif">
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 12px">
 <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:8px;overflow:hidden">
-<tr><td style="background:${BRAND.blue};padding:20px 28px;color:#fff;font-size:20px;font-weight:bold">AVOM <span style="color:${BRAND.gold}">&bull;</span> ${title}</td></tr>
+<tr><td style="background:${BRAND.blue};padding:16px 28px;color:#fff;font-size:20px;font-weight:bold"><img src="${LOGO_URL}" alt="AVOM" height="44" style="vertical-align:middle;margin-right:12px;border:0"> <span style="vertical-align:middle">${title}</span></td></tr>
 <tr><td style="padding:28px;color:${BRAND.blue};font-size:16px;line-height:1.55">${bodyHtml}</td></tr>
 <tr><td style="padding:16px 28px;background:#fafafa;color:#7f8c8d;font-size:12px">Apostle Victor Ogagaoghene Ministries</td></tr>
 </table></td></tr></table></body></html>`;

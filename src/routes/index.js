@@ -12,6 +12,7 @@ const academics = require('../controllers/academics.controller');
 const lectures = require('../controllers/lectures.controller');
 const learning = require('../controllers/learning.controller');
 const content = require('../controllers/content.controller');
+const pages = require('../controllers/pages.controller');
 const support = require('../controllers/support.controller');
 const faq = require('../controllers/faq.controller');
 const certificates = require('../controllers/certificates.controller');
@@ -34,6 +35,8 @@ pub.post('/applications', publicFormLimiter, submitRules, validate, applications
 pub.get('/ngo', content.publicNgoList);
 pub.get('/ngo/:key', content.publicNgoOne);
 pub.get('/gallery', content.publicGallery);
+pub.get('/pages', pages.publicList);
+pub.get('/pages/:slug', pages.publicOne);
 pub.get('/radio', content.publicRadioList);
 pub.get('/radio/latest', content.publicRadioLatest);
 pub.get('/podcast.xml', content.podcastFeed);
@@ -158,6 +161,11 @@ manage('/ngo', content.ngo, P.CONTENT_NGO);
 manage('/radio', content.radio, P.CONTENT_RADIO);
 
 // Support and FAQ
+adm.get('/pages', any(P.CONTENT_PAGES), pages.adminList);
+adm.post('/pages', any(P.CONTENT_PAGES), body('title').trim().notEmpty(), validate, pages.create);
+adm.get('/pages/:id', any(P.CONTENT_PAGES), pages.getOne);
+adm.patch('/pages/:id', any(P.CONTENT_PAGES), pages.update);
+adm.delete('/pages/:id', any(P.CONTENT_PAGES), pages.remove);
 adm.get('/questions', any(P.SUPPORT_READ), support.staffList);
 adm.get('/questions/:id', any(P.SUPPORT_READ), support.staffOne);
 adm.post('/questions/:id/replies', any(P.SUPPORT_RESPOND), body('message').trim().notEmpty(), validate, support.staffReply);

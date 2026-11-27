@@ -13,6 +13,7 @@ const Batch = require('../src/models/Batch');
 async function main() {
   await connectDatabase();
   const { adminEmail, adminPassword, adminName } = env.seed;
+  if (env.isProduction && adminPassword === 'ChangeMe!12345') throw new Error('Set SEED_ADMIN_PASSWORD to your own strong password; the example one is public.');
   let admin = await User.findOne({ email: adminEmail });
   if (!admin) {
     admin = await User.create({ email: adminEmail, name: adminName, role: 'super_admin', status: 'active', passwordHash: await bcrypt.hash(adminPassword, 12), passwordChangedAt: new Date() });

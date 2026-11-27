@@ -13,7 +13,9 @@
     "format:check": "prettier --check src tests",
     "seed": "node scripts/seed.js",
     "test:logic": "node --test tests/logic.test.js tests/expiry.test.js tests/whatsapp.test.js",
-    "test:api": "jest --runInBand tests/api"
+    "test:api": "jest --runInBand tests/api",
+    "sweep": "node scripts/sweep.js",
+    "smoke": "node scripts/smoke.js"
   },
   "dependencies": {
     "axios": "^1.12.2",
@@ -38,11 +40,16 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
     "eslint": "^9.39.0",
+    "globals": "^16.4.0",
     "jest": "^30.2.0",
     "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "supertest": "^7.1.4"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

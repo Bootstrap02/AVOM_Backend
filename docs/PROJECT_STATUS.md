@@ -19,6 +19,9 @@ Login/activate/reset · dashboard with real numbers · applications · students 
 ## Built (user site, `AVOM_Frontend`)
 Home, About, Our Arms (+ arm pages), Bible School, NGO (+ story pages), Radio/podcast player, Partners and giving, Contact, certificate verification · stepped application form · student login/activate/reset · dashboard with CONTINUE LEARNING · My Courses · lesson page (video autosave every 15s, quizzes, retry, unlock rules) · results · certificates and attendance · profile · Ask a Question with FAQ search.
 
+## Branding
+AVOM and school logos (AVOM + Victory College) are used on the site, student portal, admin, certificate PDF and emails; favicon from the emblem. **Open question for AVOM:** the brand guide text gives Deep Blue as `#2C3E50` but the supplied swatch image shows `#183B5D` (closer to the logo's own navy). The app currently uses `#2C3E50`; change `--color-brand-blue` in each `src/styles/index.css` (and `BRAND.blue` in `src/templates/emailTemplates.js`) once AVOM confirms. Also confirm whether the school keeps the name "AVOM Believers Bible School" now that the logo carries Victory College.
+
 ## Not done / known gaps
 - WhatsApp Business API: code is written (signed webhook at `/api/v1/whatsapp/webhook`, inbound messages become support questions matched to students by phone number, staff replies go back over WhatsApp) but needs real Meta credentials and a registered webhook to test. WhatsApp only allows free-form replies within 24 hours of the person's last message; after that a pre-approved template message is needed (not built).
 - Live radio: player appears when `radio.liveStreamUrl` is set in Settings; no streaming provider is set up.

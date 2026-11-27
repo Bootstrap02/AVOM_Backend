@@ -1,0 +1,29 @@
+# Render Blueprint for the AVOM API. Values marked sync: false are entered in the Render dashboard (never committed).
+services:
+  - type: web
+    name: avom-backend
+    runtime: node
+    plan: free              # free instances sleep after ~15 min idle; use "starter" (always on) before real students arrive
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - { key: NODE_ENV, value: production }
+      - { key: CLIENT_URL, value: "https://avom-beige.vercel.app" }      # no trailing slash
+      - { key: ADMIN_URL, value: "https://avom-admin.vercel.app" }       # no trailing slash
+      - { key: TRUST_PROXY_HOPS, value: "2" }                            # Vercel rewrite -> Render
+      - { key: COOKIE_SECURE, value: "true" }
+      - { key: COOKIE_SAMESITE, value: lax }                             # first-party cookies via the Vercel rewrite
+      - { key: STORAGE_PROVIDER, value: cloudinary }
+      - { key: EMAIL_MODE, value: resend }
+      - { key: EMAIL_FROM, value: "AVOM <no-reply@yourdomain>" }         # must be a domain verified in Resend
+      - { key: RUN_JOBS, value: "true" }                                 # with a free instance, use the external trigger instead (see docs/DEPLOYMENT.md)
+      - { key: MONGODB_URI, sync: false }
+      - { key: JWT_ACCESS_SECRET, generateValue: true }
+      - { key: JWT_REFRESH_SECRET, generateValue: true }
+      - { key: CLOUDINARY_CLOUD_NAME, sync: false }
+      - { key: CLOUDINARY_API_KEY, sync: false }
+      - { key: CLOUDINARY_API_SECRET, sync: false }
+      - { key: RESEND_API_KEY, sync: false }
+      - { key: CRON_SECRET, generateValue: true }

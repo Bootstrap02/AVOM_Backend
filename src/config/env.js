@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 // Only load .env in non-production. On Render, env vars are injected directly
 // by the platform; .env is gitignored and must not be relied upon.
-const envPath = path.resolve(__dirname, '..', '.env');
+const envPath = path.resolve(__dirname, '..', '..', '.env');
 if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'production') {
   if (fs.existsSync(envPath)) {
     dotenv.config({ path: envPath });
@@ -61,6 +61,9 @@ const env = {
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || '',
     appSecret: process.env.WHATSAPP_APP_SECRET || '',
   },
+  cronSecret: process.env.CRON_SECRET || '',
+  // Number of proxy hops in front of the API. 1 = Render only; 2 = Vercel rewrite -> Render (the setup in docs/DEPLOYMENT.md).
+  trustProxyHops: Number(process.env.TRUST_PROXY_HOPS) || 1,
   jobs: {
     enabled: process.env.RUN_JOBS ? process.env.RUN_JOBS === 'true' : isProduction,
     timezone: process.env.JOBS_TIMEZONE || 'Africa/Lagos',

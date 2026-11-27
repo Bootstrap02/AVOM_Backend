@@ -17,7 +17,7 @@ const app = express();
 const allowedOrigins = new Set([env.clientUrl, env.adminUrl, ...env.extraOrigins]);
 
 app.disable('x-powered-by');
-app.set('trust proxy', 1); // behind Render/Vercel proxies: correct client IPs for rate limiting
+app.set('trust proxy', env.trustProxyHops); // correct client IPs for rate limiting behind Vercel/Render (see TRUST_PROXY_HOPS)
 app.use(helmet());
 app.use(
   cors({
@@ -51,6 +51,17 @@ app.get('/', (_request, response) => {
   response.json({ success: true, message: 'AVOM API', data: { health: '/api/v1/health' } });
 });
 app.use('/api/v1/health', healthRoutes);
+// Lets an external scheduler (Render Cron Job, cron-job.org) run the daily sweep when the server may sleep.
+app.post('/api/v1/internal/run-expiry', async (req, res, next) => {
+  const given = Buffer.from(String(req.get('x-cron-secret') || ''));
+  const wanted = Buffer.from(env.cronSecret);
+  if (!env.cronSecret || given.length !== wanted.length || !require('node:crypto').timingSafeEqual(given, wanted)) return res.sendStatus(403);
+  try {
+    return res.json({ success: true, data: await require('./services/expiry.service').runExpirySweep() });
+  } catch (error) {
+    return next(error);
+  }
+});
 app.use('/api/v1', apiRoutes);
 app.use(notFound);
 app.use(errorHandler);

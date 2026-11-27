@@ -1,3 +1,4 @@
+const path = require('node:path');
 const PDFDocument = require('pdfkit');
 const Certificate = require('../models/Certificate');
 const Student = require('../models/Student');
@@ -74,7 +75,11 @@ async function pdf(req, res) {
   res.setHeader('Content-Disposition', `inline; filename="${cert.verificationNumber}.pdf"`);
   doc.pipe(res);
   doc.rect(25, 25, doc.page.width - 50, doc.page.height - 50).lineWidth(4).stroke('#2C3E50');
-  doc.fillColor('#2C3E50').font('Times-Bold').fontSize(32).text('AVOM Believers Bible School', { align: 'center' }).moveDown(0.2);
+  // School logo (AVOM + Victory College) centred at the top.
+  const logoWidth = 200; // keeps the whole certificate (even REVOKED) on one landscape page
+  doc.image(path.join(__dirname, '../../assets/school-logo.png'), (doc.page.width - logoWidth) / 2, 40, { width: logoWidth });
+  doc.y = 40 + logoWidth * (236 / 720) + 12;
+  doc.fillColor('#2C3E50').font('Times-Bold').fontSize(28).text('AVOM Believers Bible School', { align: 'center' }).moveDown(0.2);
   doc.font('Times-Roman').fontSize(16).fillColor('#6ABF4B').text('Apostle Victor Ogagaoghene Ministries', { align: 'center' }).moveDown(1.5);
   doc.fillColor('#2C3E50').fontSize(22).text('Certificate of Completion', { align: 'center' }).moveDown(1);
   doc.fontSize(14).text('This is to certify that', { align: 'center' }).moveDown(0.5);
